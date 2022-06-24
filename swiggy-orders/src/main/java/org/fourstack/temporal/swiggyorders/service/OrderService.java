@@ -9,6 +9,7 @@ import org.fourstack.temporal.swiggyorders.dto.ItemDTO;
 import org.fourstack.temporal.swiggyorders.dto.OrderDTO;
 import org.fourstack.temporal.swiggyorders.dto.PriceDTO;
 import org.fourstack.temporal.swiggyorders.flowsactivities.OrderWorkFlow;
+import org.fourstack.temporal.swiggyorders.helpers.OrderDaoHelper;
 import org.fourstack.temporal.swiggyorders.util.OrderIdGenerationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,23 +19,29 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.fourstack.temporal.swiggyorders.codetype.OrderStatus.CREATED;
+import static org.fourstack.temporal.swiggyorders.codetype.OrderStatus.*;
 import static org.fourstack.temporal.swiggyorders.config.QueueConfigs.CUSTOMER_ORDER_QUEUE;
 
 @Service
 public class OrderService {
 
     @Autowired
-    WorkflowServiceStubs workflowServiceStubs;
+    private WorkflowServiceStubs workflowServiceStubs;
 
     @Autowired
-    WorkflowClient workflowClient;
+    private WorkflowClient workflowClient;
+
+    @Autowired
+    private OrderDaoHelper daoHelper;
 
     public OrderDTO createOrder(OrderDTO orderDTO) {
         orderDTO.setOrderId(OrderIdGenerationUtil.generateRandomId());
         calculateTotalPrice(orderDTO);
         placeOrder(orderDTO);
         orderDTO.setOrderStatus(CREATED);
+
+        //save order to database
+        daoHelper.createOrderInDB(orderDTO);
         return orderDTO;
     }
 
@@ -46,16 +53,22 @@ public class OrderService {
     public void updateToOrderAccepted(String workflowId) {
         OrderWorkFlow workflow = workflowClient.newWorkflowStub(OrderWorkFlow.class, workflowId);
         workflow.orderAcceptedSignal();
+
+        daoHelper.updateOrderStatus(workflowId, ACCEPTED);
     }
 
     public void updateToOrderPickedUp(String workflowId) {
         OrderWorkFlow workFlow = workflowClient.newWorkflowStub(OrderWorkFlow.class, workflowId);
         workFlow.orderPickUpSignal();
+
+        daoHelper.updateOrderStatus(workflowId, PICKED_UP);
     }
 
     public void updateToOrderDelivered(String workflowId) {
         OrderWorkFlow workFlow = workflowClient.newWorkflowStub(OrderWorkFlow.class, workflowId);
         workFlow.orderDeliveredSignal();
+
+        daoHelper.updateOrderStatus(workflowId, DELIVERED);
     }
 
     private OrderWorkFlow createWorkFlowConnection(String id) {

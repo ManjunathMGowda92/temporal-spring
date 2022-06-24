@@ -10,3 +10,24 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui-custom.html
+
+#Set Application Name
+spring:
+  application:
+    name: swiggy-orders
+
+  #Set Embedded Mongo Properties
+  mongodb:
+    embedded:
+      version: latest
+      features:
+        - ONLY_WITH_SSL
+        - ONLY_WINDOWS_2008_SERVER
+        - NO_HTTP_INTERFACE_ARG
+        - ONLY_64BIT
+
+  #Set Mongo Database name and port
+  data:
+    mongodb:
+      database: swiggy-orders
+      port: 54660
