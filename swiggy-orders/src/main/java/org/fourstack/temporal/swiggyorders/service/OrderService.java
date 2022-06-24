@@ -97,6 +97,9 @@ public class OrderService {
         if (Objects.nonNull(price)) {
             BigDecimal currentPrice = price.getCurrentPrice();
             price.setTotalPrice(currentPrice.multiply(BigDecimal.valueOf(quantity)));
+        } else {
+            price = new PriceDTO();
+            item.setPrice(price);
         }
         return item;
     }
