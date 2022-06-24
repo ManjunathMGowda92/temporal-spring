@@ -5,10 +5,7 @@ import org.fourstack.temporal.swiggyorders.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/order")
@@ -18,16 +15,16 @@ public class OrderController {
     private OrderService service;
 
     @PostMapping("/create")
-    public ResponseEntity<OrderDTO> createOrder() {
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(service.createOrder());
+                .body(service.createOrder(orderDTO));
     }
 
-    @PostMapping("/start-flow/{orderId}")
+    /*@PostMapping("/start-flow/{orderId}")
     public String placeOrder(@PathVariable String orderId) {
         service.placeOrder(orderId);
         return "Order Placed";
-    }
+    }*/
 
     @PostMapping("/accept/{orderId}")
     public String acceptOrder(@PathVariable String orderId) {

@@ -4,6 +4,7 @@ import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.workflow.Workflow;
 import lombok.extern.slf4j.Slf4j;
+import org.fourstack.temporal.swiggyorders.dto.OrderDTO;
 
 import java.time.Duration;
 
@@ -26,9 +27,9 @@ public class OrderWorkFlowImpl implements OrderWorkFlow {
     public boolean isOrderDelivered = false;
 
     @Override
-    public void startApprovalWorkFlow() {
+    public void startApprovalWorkFlow(OrderDTO order) {
         log.info("OrderWorkFlow: Order placement Started.");
-        activity.placeOrder();
+        activity.placeOrder(order);
 
         log.info("OrderWorkFlow: Waiting for Restaurant to confirm your order.");
         Workflow.await(() -> isOrderConfirmed);

@@ -21,15 +21,15 @@ public class OrderService {
     @Autowired
     WorkflowClient workflowClient;
 
-    public OrderDTO createOrder() {
-        return OrderDTO.builder()
-                .orderId(OrderIdGenerationUtil.generateRandomId())
-                .build();
+    public OrderDTO createOrder(OrderDTO orderDTO) {
+        orderDTO.setOrderId(OrderIdGenerationUtil.generateRandomId());
+        placeOrder(orderDTO);
+        return orderDTO;
     }
 
-    public void placeOrder(String workflowId) {
-        OrderWorkFlow workflow = createWorkFlowConnection(workflowId);
-        WorkflowClient.start(workflow :: startApprovalWorkFlow);
+    public void placeOrder(OrderDTO orderDTO) {
+        OrderWorkFlow workflow = createWorkFlowConnection(orderDTO.getOrderId());
+        WorkflowClient.start(() -> workflow.startApprovalWorkFlow(orderDTO));
     }
 
     public void updateToOrderAccepted(String workflowId) {
