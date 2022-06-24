@@ -4,6 +4,7 @@ import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.workflow.Workflow;
+import org.fourstack.temporal.swiggyorders.codetype.OrderStatus;
 import org.fourstack.temporal.swiggyorders.dto.ItemDTO;
 import org.fourstack.temporal.swiggyorders.dto.OrderDTO;
 import org.fourstack.temporal.swiggyorders.dto.PriceDTO;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.fourstack.temporal.swiggyorders.codetype.OrderStatus.CREATED;
 import static org.fourstack.temporal.swiggyorders.config.QueueConfigs.CUSTOMER_ORDER_QUEUE;
 
 @Service
@@ -32,6 +34,7 @@ public class OrderService {
         orderDTO.setOrderId(OrderIdGenerationUtil.generateRandomId());
         calculateTotalPrice(orderDTO);
         placeOrder(orderDTO);
+        orderDTO.setOrderStatus(CREATED);
         return orderDTO;
     }
 
