@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.fourstack.temporal.swiggyorders.codetype.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,4 +20,5 @@ public class OrderDTO {
     private String orderId;
     private List<ItemDTO> items;
     private BigDecimal totalPriceOnOrder;
+    private OrderStatus orderStatus;
 }

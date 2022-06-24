@@ -20,12 +20,6 @@ public class OrderController {
                 .body(service.createOrder(orderDTO));
     }
 
-    /*@PostMapping("/start-flow/{orderId}")
-    public String placeOrder(@PathVariable String orderId) {
-        service.placeOrder(orderId);
-        return "Order Placed";
-    }*/
-
     @PostMapping("/accept/{orderId}")
     public String acceptOrder(@PathVariable String orderId) {
         service.updateToOrderAccepted(orderId);
