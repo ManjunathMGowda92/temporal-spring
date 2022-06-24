@@ -1,3 +1,12 @@
 temporal:
   service-address: '127.0.0.1:7233'
   namespace: default
+
+server:
+  port: 8090
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui-custom.html
