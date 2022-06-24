@@ -15,48 +15,8 @@ import java.util.Optional;
 @Component
 public class OrderActivityImpl implements OrderActivity {
     @Override
-    public OrderDTO placeOrder(OrderDTO dto) {
+    public void placeOrder(OrderDTO dto) {
         log.info("OrderActivity: Order has been placed successfully");
-        calculateTotalPrice(dto);
-        return dto;
-    }
-
-    /**
-     * Calculate total price on Order.
-     *
-     * @param dto Order Object
-     */
-    private void calculateTotalPrice(OrderDTO dto) {
-        if (Objects.nonNull(dto)) {
-            List<ItemDTO> items = dto.getItems();
-
-            if (Objects.nonNull(items) && !items.isEmpty()) {
-                Optional<BigDecimal> optionalTotal = items.stream()
-                        .map(this::calculateItemPrice)
-                        .map(item -> (Objects.nonNull(item.getPrice())) ? item.getPrice().getTotalPrice()
-                                : BigDecimal.valueOf(0))
-                        .reduce(BigDecimal::add);
-
-                dto.setTotalPriceOnOrder(optionalTotal.orElse(BigDecimal.valueOf(0)));
-            }
-        }
-    }
-
-    /**
-     * Calculate total price on each item by multiplying the current price
-     * with quantity of Item.
-     *
-     * @param item {@link ItemDTO} object having item details (name, quantity and price)
-     * @return ItemDTO Object
-     */
-    private ItemDTO calculateItemPrice(ItemDTO item) {
-        PriceDTO price = item.getPrice();
-        int quantity = item.getQuantity();
-        if (Objects.nonNull(price)) {
-            BigDecimal currentPrice = price.getCurrentPrice();
-            price.setTotalPrice(currentPrice.multiply(BigDecimal.valueOf(quantity)));
-        }
-        return item;
     }
 
     @Override

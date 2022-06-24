@@ -8,7 +8,7 @@ import org.fourstack.temporal.swiggyorders.dto.OrderDTO;
 public interface OrderActivity {
 
     @ActivityMethod
-    OrderDTO placeOrder(OrderDTO dto);
+    void placeOrder(OrderDTO dto);
 
     @ActivityMethod
     void setOrderAccepted();
