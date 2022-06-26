@@ -16,6 +16,7 @@ public class OrderDaoHelper {
     @Autowired
     private ConversionService orderDaoToDtoConverter;
 
+    @Autowired
     private ConversionService orderDtoToDaoConverter;
 
     public void createOrderInDB(OrderDTO dto) {
