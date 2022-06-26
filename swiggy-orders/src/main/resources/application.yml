@@ -19,7 +19,9 @@ spring:
   #Set Embedded Mongo Properties
   mongodb:
     embedded:
-      version: latest
+      #version: latest
+      # Below one is for Ubuntu version
+      version: 5.0.5
       features:
         - ONLY_WITH_SSL
         - ONLY_WINDOWS_2008_SERVER
