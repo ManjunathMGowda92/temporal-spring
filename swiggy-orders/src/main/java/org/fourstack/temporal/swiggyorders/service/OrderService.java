@@ -47,7 +47,13 @@ public class OrderService {
 
     public void placeOrder(OrderDTO orderDTO) {
         OrderWorkFlow workflow = createWorkFlowConnection(orderDTO.getOrderId());
-        WorkflowClient.start(() -> workflow.startApprovalWorkFlow(orderDTO));
+        //WorkflowClient.start(() -> workflow.startApprovalWorkFlow(orderDTO));
+
+        /*
+         * WorkflowClient.start() - is used when the target Workflow doesn't accept any arguments.
+         * WorkflowClient.execute() - is used when the target Workflow takes arguments.
+         */
+        WorkflowClient.execute(workflow::startApprovalWorkFlow, orderDTO);
     }
 
     public void updateToOrderAccepted(String workflowId) {
