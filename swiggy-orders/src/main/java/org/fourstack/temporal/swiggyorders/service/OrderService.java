@@ -3,8 +3,6 @@ package org.fourstack.temporal.swiggyorders.service;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
-import io.temporal.workflow.Workflow;
-import org.fourstack.temporal.swiggyorders.codetype.OrderStatus;
 import org.fourstack.temporal.swiggyorders.dto.ItemDTO;
 import org.fourstack.temporal.swiggyorders.dto.OrderDTO;
 import org.fourstack.temporal.swiggyorders.dto.PriceDTO;
@@ -83,6 +81,15 @@ public class OrderService {
                 .setWorkflowId(id)
                 .build();
         return workflowClient.newWorkflowStub(OrderWorkFlow.class, options);
+    }
+
+    private <T> T createWorkFlowConnection(String workflowId, String queueName, Class<T> type) {
+        WorkflowOptions options = WorkflowOptions.newBuilder()
+                .setTaskQueue(queueName)
+                .setWorkflowId(workflowId)
+                .build();
+
+        return workflowClient.newWorkflowStub(type, options);
     }
 
     /**
