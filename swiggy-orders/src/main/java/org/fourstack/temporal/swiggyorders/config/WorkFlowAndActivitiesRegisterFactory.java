@@ -8,6 +8,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import static org.fourstack.temporal.swiggyorders.config.QueueConfigs.CUSTOMER_ORDER_QUEUE;
 
+/**
+ * Class responsible to register the Workflow Impl and Activity Impl related to the Workflows.
+ * Also creates the worker responsible for Workflows. Each Workflow should have a separate Worker.
+ *
+ * @author manjunath
+ */
 public class WorkFlowAndActivitiesRegisterFactory {
 
     public static void registerWorkFlowsAndActivities(ConfigurableApplicationContext context, WorkerFactory factory) {
@@ -15,14 +21,21 @@ public class WorkFlowAndActivitiesRegisterFactory {
         registerOrderWorkFlowAndActivity(context, factory);
     }
 
+    /**
+     * Method responsible to register the Workflow and Activity related to Order Workflow.
+     *
+     * @param context SpringApplicationContext object.
+     * @param factory WorkerFactory object from Temporal framework.
+     */
     private static void registerOrderWorkFlowAndActivity(ConfigurableApplicationContext context, WorkerFactory factory) {
         // Get OrderActivity Bean from the Application Context
         OrderActivity activity = context.getBean(OrderActivity.class);
+
         // Create Worker for Customer_Order
-        Worker worker = factory.newWorker(CUSTOMER_ORDER_QUEUE);
+        Worker customerOrderWorker = factory.newWorker(CUSTOMER_ORDER_QUEUE);
 
         // register WorkFlow and Activity for Order
-        worker.registerWorkflowImplementationTypes(OrderWorkFlowImpl.class);
-        worker.registerActivitiesImplementations(activity);
+        customerOrderWorker.registerWorkflowImplementationTypes(OrderWorkFlowImpl.class);
+        customerOrderWorker.registerActivitiesImplementations(activity);
     }
 }
